@@ -46,8 +46,8 @@ const serverlessConfiguration: AWS = {
     tags: {
       Name: 'AWS Lambda Blog Fn',
       purpose: 'Training Project',
-      createdBy: 'rchandran@presidio.com',
-      owner: 'rchandran@presidio.com',
+      createdBy: '',
+      owner: '',
     },
   },
   // import the function via paths

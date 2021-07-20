@@ -14,8 +14,8 @@ Resources:
       UserPoolTags:
         Name: "AWS Cognito User Pool"
         purpose: "Training Project"
-        createdBy: "rchandran@presidio.com"
-        owner: "rchandran@presidio.com"
+        createdBy: ""
+        owner: ""
 
   MyCognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
@@ -40,9 +40,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
   MyBlogInternetGateway:
     Type: AWS::EC2::InternetGateway
@@ -53,9 +53,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
   InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
@@ -74,9 +74,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
       VpcId: !Ref MyBlogVPC
 
   MyBlogPublicSubnet:
@@ -92,9 +92,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
   MyBlogPrivateSubnet:
     Type: AWS::EC2::Subnet
@@ -109,9 +109,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
   MyBlogPrivateSubnet2:
     Type: AWS::EC2::Subnet
@@ -126,9 +126,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
   MyBlogPrivateSubnet3:
     Type: AWS::EC2::Subnet
@@ -143,9 +143,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
   MyBlogPublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -157,9 +157,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
   MyBlogPublicRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -185,9 +185,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
   MyBlogPrivateRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -205,9 +205,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
   MyBlogPrivateRouteTableAssociation2:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -225,9 +225,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
   MyBlogPrivateRouteTableAssociation3:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -249,9 +249,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
   MyBlogRDSDBInstance:
     Type: AWS::RDS::DBInstance
@@ -271,9 +271,9 @@ Resources:
         - Key: "purpose"
           Value: "Training Project"
         - Key: "createdBy"
-          Value: "rchandran@presidio.com"
+          Value: ""
         - Key: "owner"
-          Value: "rchandran@presidio.com"
+          Value: ""
 
 Outputs:
   VPC:

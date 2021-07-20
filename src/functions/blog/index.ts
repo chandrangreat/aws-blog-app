@@ -6,8 +6,8 @@ export default {
   tags: {
     Name: 'AWS Cognito User Pool',
     purpose: 'Training Project',
-    createdBy: 'rchandran@presidio.com',
-    owner: 'rchandran@presidio.com',
+    createdBy: '',
+    owner: '',
   },
   events: [
     {
