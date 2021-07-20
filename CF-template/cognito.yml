@@ -1,0 +1,289 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Template to setup blog which is a training project
+Resources:
+  MyCognitoUserPool: #Configuration for User Pool
+    Type: AWS::Cognito::UserPool
+    Properties:
+      MfaConfiguration: "OFF"
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6
+      UsernameConfiguration:
+        CaseSensitive: True
+      UserPoolName: BlogUser
+      UserPoolTags:
+        Name: "AWS Cognito User Pool"
+        purpose: "Training Project"
+        createdBy: "rchandran@presidio.com"
+        owner: "rchandran@presidio.com"
+
+  MyCognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: "BlogUserPoolClient"
+      UserPoolId: "us-east-1_v9TUHpREw"
+
+  MyCognitoIdentityPool: #Configuration for Identity Pool
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      AllowClassicFlow: True
+      AllowUnauthenticatedIdentities: False
+      IdentityPoolName: BlogIdentity
+
+  MyBlogVPC: # COnfiguration for VPC
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: "10.5.0.0/16"
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog VPC"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+  MyBlogInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog Internet Gateway"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref MyBlogInternetGateway
+      VpcId: !Ref MyBlogVPC
+
+  MyBlogSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "A No Ingress Security Group for MyBlog"
+      GroupName: "MyBlog-Security-Group"
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog No Ingress Security Group"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+      VpcId: !Ref MyBlogVPC
+
+  MyBlogPublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyBlogVPC
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      CidrBlock: "10.5.1.0/24"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog Public Subnet"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+  MyBlogPrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyBlogVPC
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      CidrBlock: "10.5.2.0/24"
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog Private Subnet"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+  MyBlogPrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyBlogVPC
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      CidrBlock: "10.5.3.0/24"
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog Private Subnet 2 for RDS"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+  MyBlogPrivateSubnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyBlogVPC
+      AvailabilityZone: !Select [1, !GetAZs ""]
+      CidrBlock: "10.5.4.0/24"
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog Private Subnet 3 for RDS"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+  MyBlogPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MyBlogVPC
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog Public Route Table"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+  MyBlogPublicRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref MyBlogPublicRouteTable
+      SubnetId: !Ref MyBlogPublicSubnet
+
+  MyBlogPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref MyBlogPublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref MyBlogInternetGateway
+
+  MyBlogPrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MyBlogVPC
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog Private Route Table"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+  MyBlogPrivateRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref MyBlogPrivateRouteTable
+      SubnetId: !Ref MyBlogPrivateSubnet
+
+  MyBlogPrivateRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MyBlogVPC
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog Private Route Table 2"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+  MyBlogPrivateRouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref MyBlogPrivateRouteTable2
+      SubnetId: !Ref MyBlogPrivateSubnet2
+
+  MyBlogPrivateRouteTable3:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MyBlogVPC
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog Private Route Table 3"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+  MyBlogPrivateRouteTableAssociation3:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref MyBlogPrivateRouteTable3
+      SubnetId: !Ref MyBlogPrivateSubnet3
+
+  MyBlogRDSSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "Subnet Group for MyBlog RDS database"
+      DBSubnetGroupName: "myblogsubnetgroup"
+      SubnetIds:
+        - !Ref MyBlogPrivateSubnet2
+        - !Ref MyBlogPrivateSubnet3
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog RDS DB Subnet Group"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+  MyBlogRDSDBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: "20"
+      AllowMajorVersionUpgrade: False
+      AutoMinorVersionUpgrade: False
+      MasterUsername: "myblog"
+      MasterUserPassword: "myblog123"
+      DBInstanceClass: "db.t2.micro"
+      DBInstanceIdentifier: "myblog-dev-instance"
+      DBSubnetGroupName: !Ref MyBlogRDSSubnetGroup
+      Engine: "postgres"
+      Tags:
+        - Key: "Name"
+          Value: "AWS MyBlog RDS Postgres DB"
+        - Key: "purpose"
+          Value: "Training Project"
+        - Key: "createdBy"
+          Value: "rchandran@presidio.com"
+        - Key: "owner"
+          Value: "rchandran@presidio.com"
+
+Outputs:
+  VPC:
+    Description: A reference to the created VPC
+    Value: !Ref MyBlogVPC
+
+  PublicSubnet1:
+    Description: A reference to the public subnet in the 1st Availability Zone
+    Value: !Ref MyBlogPublicSubnet
+
+  PrivateSubnet1:
+    Description: A reference to the private subnet in the 1st Availability Zone
+    Value: !Ref MyBlogPrivateSubnet
